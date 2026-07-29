@@ -427,12 +427,13 @@ def do_screenshot():
     exe_path = os.path.join(BASE, "ScreenGrabber.exe")
     if os.path.exists(exe_path):
         try:
-            res = subprocess.run([exe_path, path], capture_output=True, text=True, timeout=5)
+            res = subprocess.run([exe_path, path], capture_output=True, text=True, timeout=5, creationflags=0x08000000)
             if os.path.exists(path) and os.path.getsize(path) > 10000:
                 print(f"[SS DESKTOP SUCCESS] Captured physical PC screen: {os.path.getsize(path)} bytes")
                 return path
         except Exception as e:
             print(f"[SS EXE ERR] {e}")
+
 
     # 2. Secondary: PIL ImageGrab Desktop Screen Grabber
     try:
@@ -667,12 +668,13 @@ def h_switch_model(msg):
 def h_minimize_all(msg):
     try:
         ps_cmd = "Get-Process -Name steam -ErrorAction SilentlyContinue | ForEach-Object { `$_.CloseMainWindow() }; (New-Object -ComObject Shell.Application).MinimizeAll()"
-        subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], capture_output=True)
+        subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], capture_output=True, creationflags=0x08000000)
         send(msg.chat.id, "📉 *Jendela Steam & Seluruh Jendela Desktop Berhasil Di-Minimize!*")
         time.sleep(0.5)
         h_ss(msg)
     except Exception as e:
         send(msg.chat.id, f"❌ Error: {e}")
+
 
 
 def h_hide_antigravity(msg):

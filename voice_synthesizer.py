@@ -51,7 +51,8 @@ def generate_voice_note(text, lang='id', speed=1.35):
         if os.path.exists(raw_path):
             # Speed up audio naturally by 35% without changing pitch using ffmpeg atempo
             cmd = ["ffmpeg", "-y", "-i", raw_path, "-filter:a", f"atempo={speed}", "-c:a", "libvorbis", fast_path]
-            subprocess.run(cmd, capture_output=True, text=True)
+            subprocess.run(cmd, capture_output=True, text=True, creationflags=0x08000000)
+
             
             try: os.remove(raw_path)
             except: pass
