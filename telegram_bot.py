@@ -294,10 +294,14 @@ t_queue.start()
 processed_tg_msg_ids = set()
 
 def auth(msg):
-    if msg.from_user.id != ALLOWED_ID:
-        log_activity(f"⚠️ UNAUTHORIZED MSG from ID {msg.from_user.id} ({msg.from_user.first_name}): {msg.text}")
+    uid = getattr(getattr(msg, 'from_user', None), 'id', None)
+    if uid is None and hasattr(msg, 'chat'):
+        uid = getattr(msg.chat, 'id', None)
+    if uid != ALLOWED_ID:
+        log_activity(f"⚠️ UNAUTHORIZED MSG from ID {uid}: {getattr(msg, 'text', '')}")
         return False
     return True
+
 
 def is_dup_msg(msg):
     if hasattr(msg, 'message_id') and msg.message_id:

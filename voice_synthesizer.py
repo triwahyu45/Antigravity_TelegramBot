@@ -16,22 +16,29 @@ from gtts import gTTS
 BASE_DIR = r"G:\Antigravity_Server"
 SHOTS_DIR = os.path.join(BASE_DIR, "Screenshots")
 
-def clean_text_for_speech(text):
+def clean_text_for_speech(text, max_len=1200):
     if not text: return ""
+    # Strip HTML tags, markdown code blocks, URLs
     t = re.sub(r'```.*?```', '', text, flags=re.DOTALL)
     t = re.sub(r'`.*?`', '', t)
     t = re.sub(r'<[^>]+>', '', t)
     t = re.sub(r'http\S+', '', t)
     t = re.sub(r'[*#_~`-]', ' ', t)
     t = re.sub(r'\s+', ' ', t).strip()
-    if len(t) > 280:
-        t = t[:280] + "..."
+    
+    if len(t) > max_len:
+        # Cut at sentence boundary
+        cut_text = t[:max_len]
+        last_period = max(cut_text.rfind('.'), cut_text.rfind('!'), cut_text.rfind('?'))
+        if last_period > max_len // 2:
+            cut_text = cut_text[:last_period+1]
+        t = cut_text.strip()
     return t
 
 def generate_voice_note(text, lang='id', speed=1.35):
     """Generates a fast (1.35x speed) natural .ogg voice note file for Telegram"""
     try:
-        speech_text = clean_text_for_speech(text)
+        speech_text = clean_text_for_speech(text, max_len=1200)
         if not speech_text or len(speech_text) < 3:
             return None
             
