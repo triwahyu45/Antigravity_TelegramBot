@@ -662,12 +662,14 @@ def h_switch_model(msg):
 
 def h_minimize_all(msg):
     try:
-        subprocess.run(["powershell", "-NoProfile", "-Command", "(New-Object -ComObject Shell.Application).MinimizeAll()"], capture_output=True)
-        send(msg.chat.id, "📉 *Seluruh Jendela Desktop (Termasuk Steam) Berhasil Di-Minimize!*")
+        ps_cmd = "Get-Process -Name steam -ErrorAction SilentlyContinue | ForEach-Object { `$_.CloseMainWindow() }; (New-Object -ComObject Shell.Application).MinimizeAll()"
+        subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], capture_output=True)
+        send(msg.chat.id, "📉 *Jendela Steam & Seluruh Jendela Desktop Berhasil Di-Minimize!*")
         time.sleep(0.5)
         h_ss(msg)
     except Exception as e:
         send(msg.chat.id, f"❌ Error: {e}")
+
 
 def h_hide_antigravity(msg):
 
