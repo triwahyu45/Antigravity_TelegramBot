@@ -487,9 +487,8 @@ def get_status():
 
 def get_summary_text():
     return (
-        "📋 *RANGKUMAN LENGKAP ARSITEKTUR GOOGLE ANTIGRAVITY BOT v1.2.2*\n\n"
+        "📋 *RANGKUMAN LENGKAP ARSITEKTUR GOOGLE ANTIGRAVITY BOT v2.0*\n\n"
         "✨ *Sistem Remote Control Telegram Bridge*\n"
-        "• *Smart Local GPU Router:* 0 Token API untuk chat santai via Ollama GPU PC (<0.6s)\n"
         "• *Prompt Injector Engine:* CDP WebSocket native key event (100% instant submit)\n"
         "• *Real-Time DOM Mirror:* Scrape AI text, code edits, terminal logs, & foto original\n"
         "• *Fast Voice Synthesizer:* Pesan suara Bahasa Indonesia 1.35x tempo cepat & jernih\n"
@@ -497,8 +496,51 @@ def get_summary_text():
         "• *1-Klik System Tray:* Ikon aktif di dekat jam PC dengan menu Klik Kanan\n"
         "• *Keamanan Secrets:* Token & Chat ID terisolasi di secrets.json (Clean Git History)\n\n"
         "⚡ *System Creator:* [TriWahyu45](https://github.com/triwahyu45)\n"
-        "🌐 *GitHub Release:* [v1.2.2](https://github.com/triwahyu45/Antigravity_TelegramBot)"
+        "🌐 *GitHub Release:* [v2.0](https://github.com/triwahyu45/Antigravity_TelegramBot)"
     )
+
+def get_storage_text():
+    try:
+        c = psutil.disk_usage('C:')
+        g_free_str = "N/A"
+        if os.path.exists('G:'):
+            g = psutil.disk_usage('G:')
+            g_free_str = f"{round(g.free/1024**3, 1)} GB Free ({g.percent}% used)"
+
+        msg = (
+            "💾 *LAPORAN SISA KAPASITAS STORAGE PC (REAL-TIME)*\n\n"
+            f"• *Disk C: (System)* — {round(c.free/1024**3, 1)} GB Free ({c.percent}% used)\n"
+            f"• *Disk G: (Tri Wahyu)* — {g_free_str}\n"
+        )
+        if os.path.exists('E:'):
+            e = psutil.disk_usage('E:')
+            msg += f"• *Disk E: (UMUM)* — {round(e.free/1024**3, 1)} GB Free ({e.percent}% used)\n"
+        if os.path.exists('F:'):
+            f_disk = psutil.disk_usage('F:')
+            msg += f"• *Disk F: (DODO)* — {round(f_disk.free/1024**3, 1)} GB Free ({f_disk.percent}% used)\n"
+            
+        msg += "\n⚡ *System Creator:* [TriWahyu45](https://github.com/triwahyu45)"
+        return msg
+    except Exception as err:
+        return f"❌ Error cek storage: {err}"
+
+def setup_bot_commands():
+    try:
+        commands = [
+            types.BotCommand("status", "📊 Monitor CPU, RAM & Server PC"),
+            types.BotCommand("storage", "💾 Cek Sisa Storage Disk C, G, E, F"),
+            types.BotCommand("summary", "📋 Rangkuman Lengkap Arsitektur Bot"),
+            types.BotCommand("ss", "📸 Tangkap Layar PC Monitor Real-Time"),
+            types.BotCommand("minimize_steam", "📉 Minimize Steam & Jendela PC"),
+            types.BotCommand("hide", "🙈 Sembunyikan Antigravity (Silent Mode)"),
+            types.BotCommand("open_antigravity", "🖥️ Tampilkan Jendela Antigravity"),
+            types.BotCommand("models", "🤖 Pilihan Model AI (Flash, Pro, Sonnet)")
+        ]
+        bot.set_my_commands(commands)
+        log_activity("✅ Telegram 3-Strip Menu Commands Updated Successfully!")
+    except Exception as e:
+        log_activity(f"⚠️ Failed to set bot commands: {e}")
+
 
 
 def kill_antigravity_processes():
@@ -865,8 +907,11 @@ def h_text(msg):
         h_ecc_learn(msg)
     elif tl in ("status", "status pc", "cek laptop", "cek pc", "kondisi", "kondisi pc", "/status", "📊 status pc"):
         h_status(msg)
+    elif tl in ("/storage", "storage", "cek storage", "sisa storage", "💾 storage", "disk"):
+        send(msg.chat.id, get_storage_text())
     elif tl in ("/summary", "summary", "summary antigravity", "📋 summary antigravity", "rangkuman"):
         send(msg.chat.id, get_summary_text())
+
     elif tl in ("/ss", "/screenshot", "ss", "screenshot", "foto layar", "📸 screenshot"):
         h_ss(msg)
 
@@ -954,7 +999,9 @@ threading.Thread(target=antigravity_auto_relauncher_worker, daemon=True, name="A
 
 if __name__ == "__main__":
     ensure_singleton()
+    setup_bot_commands()
     print(f"[NODE 1: BOT RECEIVER] Running PID={os.getpid()} with Message Queue & Photo System...")
+
 
     try:
         bot.delete_webhook()
