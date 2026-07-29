@@ -1,0 +1,6 @@
+@echo off
+title Starting Google Antigravity Telegram Bot System Tray...
+echo [INFO] Starting Antigravity Bot & System Tray Icon...
+start /b pythonw "G:\Antigravity_Server\Bot_Scripts\tray_launcher.py"
+echo [SUCCESS] Bot Active in System Tray (Icon near clock)!
+timeout /t 3
