@@ -895,8 +895,8 @@ def h_text(msg):
             bot.send_chat_action(msg.chat.id, "typing")
         except: pass
 
-        send(msg.chat.id, "⚡ *Pesan masuk ke Antigravity!*", use_kb=False)
         msg_queue.put((prompt, msg.chat.id, t))
+
 
 
         q_size = msg_queue.qsize()
