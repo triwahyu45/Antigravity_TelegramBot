@@ -888,10 +888,23 @@ def h_text(msg):
                 prompt = f"[Membalas: \"{reply_clean}\"]\n{t}"
 
         try:
+            import local_gpu_router as router
+            if router.is_casual_chat(prompt):
+                active, models = router.is_ollama_active()
+                if active:
+                    gpu_reply = router.query_local_gpu_ollama(prompt)
+                    if gpu_reply:
+                        send(msg.chat.id, gpu_reply)
+                        return
+        except Exception as e:
+            print("[GPU ROUTER ERR]", e)
+
+        try:
             bot.send_chat_action(msg.chat.id, "typing")
         except: pass
 
         msg_queue.put((prompt, msg.chat.id, t))
+
         q_size = msg_queue.qsize()
         log_activity(f"📥 QUEUED (size={q_size}): {prompt[:50]}")
         
