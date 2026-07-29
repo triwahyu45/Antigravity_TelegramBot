@@ -29,6 +29,8 @@ An advanced, asynchronous, multi-modal Telegram Bot bridge to remotely monitor, 
 ├── telegram_bot.py              # Main Telegram Polling & Command Handler
 ├── antigravity_injector.py      # CDP WebSocket Prompt Injection Engine
 ├── dom_mirror_final.py          # Real-time DOM Response & Progress Mirror
+├── voice_synthesizer.py         # Natural Bilingual Fast TTS Voice Synthesizer
+├── win_toggle.py                # C# Win32 Silent Window Show/Hide Toggle Engine
 ├── ScreenGrabber.cs             # Native C# Monitor Screen Capture Source
 ├── secrets_loader.py            # Dynamic Secrets & Credentials Loader
 ├── Start_Antigravity_Bot.vbs    # Double-click silent launcher
@@ -38,6 +40,7 @@ An advanced, asynchronous, multi-modal Telegram Bot bridge to remotely monitor, 
 ├── antigravity_bot_architecture.md # Full Architecture & Technical Specification
 └── .gitignore                   # Keeps API Keys, Tokens, Logs, and Temp Files Safe
 ```
+
 
 ---
 
