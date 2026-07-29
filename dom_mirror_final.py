@@ -140,7 +140,8 @@ JS_SCRAPE = r"""
         var title = document.title || "";
         var msgs = [];
         var inputArea = document.querySelector('[contenteditable="true"]');
-        var isBusy = document.querySelector('button[aria-label*="Stop"], button[title*="Stop"], .animate-spin') !== null;
+        var isBusy = document.querySelector('button[aria-label*="Stop"], button[aria-label*="Cancel"], button[title*="Stop"], button[title*="Cancel"], [class*="spin"], [class*="loading"], [data-state="active"]') !== null;
+
 
         // 1. SCRAPE USER INPUTS
         var PLACEHOLDER_TEXTS = [
@@ -474,6 +475,9 @@ def run():
             title = data.get('title', '')
             isBusy = data.get('isBusy', False)
 
+            if not was_busy_state and isBusy:
+                send_tg("⏳ <b>[BEKERJA / WORKING]</b> AI sedang memproses perintah di PC...", "progress")
+
             if was_busy_state and not isBusy:
                 # Force send the latest AI summary response when AI finishes working!
                 msgs = data.get('msgs', [])
@@ -489,6 +493,7 @@ def run():
                             save_seen(seen)
                 send_tg("✅ <b>[SELESAI / FINISHED]</b> AI telah selesai memproses perintah di PC!", "progress")
             was_busy_state = isBusy
+
 
 
             # Always mirror AI responses regardless of window title (MD5 hashes prevent duplicates)
