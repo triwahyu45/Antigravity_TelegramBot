@@ -214,15 +214,16 @@ JS_SCRAPE = r"""
             return children;
         }
 
-        var aiContainers = document.querySelectorAll('div.leading-relaxed.select-text.text-sm, [class*="prose"]');
+        var aiContainers = document.querySelectorAll('div.leading-relaxed, [class*="prose"], div.markdown-body, div[class*="ai-message"], div[class*="assistant"]');
         for (var container of aiContainers) {
             if (container.closest('[contenteditable="true"]')) continue;
             if (inputArea && inputArea.contains(container)) continue;
             var md = domToMD(container).replace(/\n{2,}/g, "\n").trim();
-            if (md.length > 10) {
+            if (md.length > 5) {
                 msgs.push({role: 'ai', text: md});
             }
         }
+
 
         // 4. IMAGE EXTRACTION
         var imgEls = document.querySelectorAll('img');
@@ -474,8 +475,21 @@ def run():
             isBusy = data.get('isBusy', False)
 
             if was_busy_state and not isBusy:
+                # Force send the latest AI summary response when AI finishes working!
+                msgs = data.get('msgs', [])
+                ai_msgs = [m for m in msgs if m['role'] == 'ai']
+                if ai_msgs:
+                    last_ai = ai_msgs[-1]
+                    cleaned = clean_ai_text(last_ai['text'])
+                    if cleaned and len(cleaned) >= 5:
+                        ai_k = msg_key('ai', cleaned)
+                        if ai_k not in seen:
+                            send_tg(cleaned, 'ai')
+                            seen.add(ai_k)
+                            save_seen(seen)
                 send_tg("✅ <b>[SELESAI / FINISHED]</b> AI telah selesai memproses perintah di PC!", "progress")
             was_busy_state = isBusy
+
 
             # Always mirror AI responses regardless of window title (MD5 hashes prevent duplicates)
             pass
