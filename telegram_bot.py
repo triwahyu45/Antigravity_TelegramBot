@@ -696,29 +696,10 @@ def h_minimize_all(msg):
 
 
 def h_hide_antigravity(msg):
-
     try:
-        user32 = ctypes.windll.user32
-        target_hwnd = None
-        def enum_cb(hwnd, lparam):
-            nonlocal target_hwnd
-            length = user32.GetWindowTextLengthW(hwnd)
-
-            if length > 0:
-                buff = ctypes.create_unicode_buffer(length + 1)
-                user32.GetWindowTextW(hwnd, buff, length + 1)
-                t_lower = buff.value.lower()
-                if "wahyu's pc" in t_lower or "antigravity" in t_lower:
-                    target_hwnd = hwnd
-                    return False
-            return True
-
-        user32.EnumWindows(WNDENUMPROC(enum_cb), 0)
-        if target_hwnd:
-            user32.ShowWindow(target_hwnd, 0) # SW_HIDE (0) -> Completely removes window & taskbar icon from desktop & taskbar!
-            send(msg.chat.id, "🙈 *Jendela Antigravity BERHASIL DISEMBUNYIKAN TOTAL (100% Silent Background & Hilang dari Taskbar)!*\nLayar PC & Taskbar 100% bersih. Chat Telegram HP ↔ AI di PC tetap terhubung & berbalas instan di background!")
-        else:
-            send(msg.chat.id, "ℹ️ *Jendela Antigravity sudah dalam kondisi Sembunyi / Hide.*")
+        import win_toggle
+        win_toggle.hide_antigravity_window()
+        send(msg.chat.id, "🙈 *Jendela Antigravity BERHASIL DISEMBUNYIKAN TOTAL (100% Silent Background & Hilang dari Taskbar)!*\nLayar PC & Taskbar 100% bersih. Chat Telegram HP ↔ AI di PC tetap terhubung & berbalas instan di background!")
     except Exception as e:
         send(msg.chat.id, f"❌ Gagal menyembunyikan jendela: {e}")
 
@@ -911,22 +892,12 @@ def h_text(msg):
                 prompt = f"[Membalas: \"{reply_clean}\"]\n{t}"
 
         try:
-            import local_gpu_router as router
-            if router.is_casual_chat(prompt):
-                active, models = router.is_ollama_active()
-                if active:
-                    gpu_reply = router.query_local_gpu_ollama(prompt)
-                    if gpu_reply:
-                        send(msg.chat.id, gpu_reply)
-                        return
-        except Exception as e:
-            print("[GPU ROUTER ERR]", e)
-
-        try:
             bot.send_chat_action(msg.chat.id, "typing")
         except: pass
 
+        send(msg.chat.id, "⚡ *Pesan masuk ke Antigravity!*", use_kb=False)
         msg_queue.put((prompt, msg.chat.id, t))
+
 
         q_size = msg_queue.qsize()
         log_activity(f"📥 QUEUED (size={q_size}): {prompt[:50]}")
