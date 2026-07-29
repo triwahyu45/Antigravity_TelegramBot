@@ -41,20 +41,22 @@ if hasattr(sys.stdout, 'reconfigure'):
 
 # ── Single Instance Lock (kills stale duplicate on startup) ────
 _LOCK_FILE = r"G:\Antigravity_Server\telegram_bot.pid"
-try:
-    if os.path.exists(_LOCK_FILE):
-        old_pid = int(open(_LOCK_FILE).read().strip())
-        if old_pid != os.getpid():
-            try:
-                old_proc = psutil.Process(old_pid)
-                old_proc.kill()
-                time.sleep(0.5)
-                print(f"[SINGLETON] Killed stale instance PID {old_pid}")
-            except (psutil.NoSuchProcess, psutil.AccessDenied):
-                pass
-    open(_LOCK_FILE, 'w').write(str(os.getpid()))
-except Exception as _e:
-    print(f"[SINGLETON ERR] {_e}")
+def ensure_singleton():
+    try:
+        if os.path.exists(_LOCK_FILE):
+            old_pid = int(open(_LOCK_FILE).read().strip())
+            if old_pid != os.getpid():
+                try:
+                    old_proc = psutil.Process(old_pid)
+                    old_proc.kill()
+                    time.sleep(0.5)
+                    print(f"[SINGLETON] Killed stale instance PID {old_pid}")
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    pass
+        open(_LOCK_FILE, 'w').write(str(os.getpid()))
+    except Exception as _e:
+        print(f"[SINGLETON ERR] {_e}")
+
 
 
 def md_to_telegram_html(md_text):
@@ -980,7 +982,9 @@ threading.Thread(target=antigravity_auto_relauncher_worker, daemon=True, name="A
 
 
 if __name__ == "__main__":
+    ensure_singleton()
     print(f"[NODE 1: BOT RECEIVER] Running PID={os.getpid()} with Message Queue & Photo System...")
+
     try:
         bot.delete_webhook()
     except Exception:
