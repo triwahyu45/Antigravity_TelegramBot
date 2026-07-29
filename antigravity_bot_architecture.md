@@ -96,23 +96,41 @@ It enables natural multi-modal bidirectional communication (Text, Photos, Videos
 
 ---
 
-## 🛠️ Installation & Setup Guide
+## 🛠️ Step-by-Step Installation & Setup Guide
 
-1. Clone repository to your project directory.
-2. Copy `config.example.py` to `config.py` and set your credentials:
-   ```python
-   TELEGRAM_BOT_TOKEN = "your_bot_token_here"
-   ALLOWED_TELEGRAM_ID = 123456789
+1. **Step 1: Get Telegram Bot Token via `@BotFather`**:
+   - Open Telegram and search `@BotFather`.
+   - Send `/newbot`, name your bot, and copy your HTTP API Access Token.
+
+2. **Step 2: Get Your Numeric User ID via `@userinfobot`**:
+   - Search `@userinfobot` on Telegram, send `/start`, and copy your numeric User ID.
+
+3. **Step 3: Clone Repository & Setup Credentials**:
+   ```bash
+   git clone https://github.com/triwahyu45/Antigravity_TelegramBot.git
+   cd Antigravity_TelegramBot
+   cp secrets.example.json secrets.json
    ```
-3. Compile `ScreenGrabber.cs` (if needed):
-   ```cmd
+   Edit `secrets.json` and paste your token and ID:
+   ```json
+   {
+     "BOT_TOKEN": "YOUR_TELEGRAM_BOT_TOKEN_FROM_BOTFATHER",
+     "ALLOWED_ID": YOUR_NUMERIC_TELEGRAM_USER_ID
+   }
+   ```
+
+4. **Step 4: Install Dependencies & Compile ScreenGrabber**:
+   ```bash
+   pip install -r requirements.txt
    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /target:exe /out:ScreenGrabber.exe ScreenGrabber.cs
    ```
-4. Start Bot & Mirror Services:
-   ```cmd
+
+5. **Step 5: Launch Bot Services**:
+   ```bash
    python telegram_bot.py
    python dom_mirror_final.py
    ```
 
 ---
-*Built with ❤️ for Google Antigravity Agent Remote Automation.*
+*Built with ❤️ by TriWahyu45 for Google Antigravity Agent Remote Automation.*
+
