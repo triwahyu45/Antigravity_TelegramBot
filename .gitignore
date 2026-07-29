@@ -1,0 +1,36 @@
+# Environment & Secret files
+secrets.json
+.env
+config.py
+secrets.py
+*.key
+
+# Logs & State Files
+*.log
+bot_activity.log
+compare_activity.log
+dom_mirror_seen.json
+injected_hashes.json
+telegram_bot.pid
+
+# Python & System Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Generated Executables & Temp Files
+*.exe
+*.png
+*.jpg
+*.jpeg
+*.bin
+
+# Received & Screenshot Storage Directories
+Received_Files/
+Screenshots/
+Releases/
+
+# OS Metadata
+.DS_Store
+Thumbs.db
