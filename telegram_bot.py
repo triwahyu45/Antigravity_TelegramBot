@@ -483,6 +483,22 @@ def get_status():
 
     return msg
 
+def get_summary_text():
+    return (
+        "📋 *RANGKUMAN LENGKAP ARSITEKTUR GOOGLE ANTIGRAVITY BOT v1.2.2*\n\n"
+        "✨ *Sistem Remote Control Telegram Bridge*\n"
+        "• *Smart Local GPU Router:* 0 Token API untuk chat santai via Ollama GPU PC (<0.6s)\n"
+        "• *Prompt Injector Engine:* CDP WebSocket native key event (100% instant submit)\n"
+        "• *Real-Time DOM Mirror:* Scrape AI text, code edits, terminal logs, & foto original\n"
+        "• *Fast Voice Synthesizer:* Pesan suara Bahasa Indonesia 1.35x tempo cepat & jernih\n"
+        "• *ScreenGrabber:* Tangkapan layar PC monitor fisik asli (Steam, Apps, Desktop)\n"
+        "• *1-Klik System Tray:* Ikon aktif di dekat jam PC dengan menu Klik Kanan\n"
+        "• *Keamanan Secrets:* Token & Chat ID terisolasi di secrets.json (Clean Git History)\n\n"
+        "⚡ *System Creator:* [TriWahyu45](https://github.com/triwahyu45)\n"
+        "🌐 *GitHub Release:* [v1.2.2](https://github.com/triwahyu45/Antigravity_TelegramBot)"
+    )
+
+
 def kill_antigravity_processes():
     for proc in psutil.process_iter(['pid', 'name']):
         try:
@@ -866,8 +882,11 @@ def h_text(msg):
         h_ecc_learn(msg)
     elif tl in ("status", "status pc", "cek laptop", "cek pc", "kondisi", "kondisi pc", "/status", "📊 status pc"):
         h_status(msg)
+    elif tl in ("/summary", "summary", "summary antigravity", "📋 summary antigravity", "rangkuman"):
+        send(msg.chat.id, get_summary_text())
     elif tl in ("/ss", "/screenshot", "ss", "screenshot", "foto layar", "📸 screenshot"):
         h_ss(msg)
+
     elif tl in ("/buka_antigravity", "/open_antigravity", "/show", "buka antigravity", "open antigravity", "🖥️ buka antigravity"):
         h_open_antigravity(msg)
     elif tl in ("/hide", "/sembunyikan", "sembunyikan antigravity", "hide antigravity", "🙈 sembunyikan antigravity", "🙈 hide antigravity"):
