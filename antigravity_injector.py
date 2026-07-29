@@ -1,11 +1,12 @@
 """
-Antigravity 100% CDP State-Aware Injector (Robust WS Frame Decoder)
-- Pure CDP DOM Automation (Zero Mouse/Keyboard Coordinates)
-- Robust WebSocket frame buffer decoder (handles event frames & split frames)
-- Uses document.execCommand('insertText') for native ProseMirror/React compatibility
-- Waits 200ms for React re-render so Send button mounts, then clicks button[aria-label*="Send"]
-- Single-shot instant submission on 1st attempt
+Google Antigravity Telegram Remote Control Bridge
+CDP WebSocket Prompt Injection Engine & Native Keyboard Event Dispatcher
+
+Author & Original Creator : TriWahyu45 (https://github.com/triwahyu45)
+Repository                : https://github.com/triwahyu45/Antigravity_TelegramBot
+Copyright (c) 2026 TriWahyu45. All rights reserved.
 """
+
 import os, sys, time, json, socket, struct, base64
 import urllib.request
 from urllib.parse import urlparse

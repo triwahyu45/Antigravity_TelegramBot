@@ -1,5 +1,15 @@
+"""
+Google Antigravity Telegram Remote Control Bridge
+Main Asynchronous Bot Engine & Dispatcher
+
+Author & Original Creator : TriWahyu45 (https://github.com/triwahyu45)
+Repository                : https://github.com/triwahyu45/Antigravity_TelegramBot
+Copyright (c) 2026 TriWahyu45. All rights reserved.
+"""
+
 import os
 import sys
+
 import json
 import time
 import base64
@@ -462,8 +472,10 @@ def get_status():
         f"💾 *Disk C:* {c.percent}% used ({round(c.free/1024**3,1)} GB free)\n"
         f"💾 *Disk G:* {g_str}\n\n"
         f"⚙️ *Service Receiver:* Active (PID {os.getpid()})\n"
-        f"🙈 *Window Mode:* Silent Background (Minimized Supported)"
+        f"🙈 *Window Mode:* Silent Background (Minimized Supported)\n"
+        f"⚡ *System Creator:* [TriWahyu45](https://github.com/triwahyu45)"
     )
+
     return msg
 
 def kill_antigravity_processes():
