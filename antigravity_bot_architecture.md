@@ -9,6 +9,11 @@ The **Google Antigravity Telegram Bridge** is a production-grade, real-time, asy
 
 It enables natural multi-modal bidirectional communication (Text, Photos, Videos, Voice Notes, Audio, Documents), instant prompt injection via Chromium DevTools Protocol (CDP) WebSocket native hardware key events, real-time DOM mirror synchronization, and 100% silent background execution without taskbar icons (`SW_HIDE`).
 
+### 💡 Core Principle: Local GPU/CPU Offloading & Maximum Token Efficiency
+- **Zero AI Token Waste**: Heavy processing tasks—including Speech-to-Text (STT), Text-to-Speech (TTS), Native C# Physical Screen Capture, and DOM Scrapes—are offloaded 100% to local PC GPU/CPU hardware.
+- **Extended Model Lifespan**: Conserves AI API model tokens strictly for reasoning, coding, and complex tasks, keeping model usage active and efficient for as long as possible.
+
+
 ---
 
 ## 🏗️ Architecture & Component Flow

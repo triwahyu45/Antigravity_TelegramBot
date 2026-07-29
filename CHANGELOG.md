@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## 💡 [v1.0.5] - 2026-07-29 (Local GPU/CPU Offloading & Maximum Token Efficiency)
+- **Local PC Hardware Offloading**: All heavy auxiliary tasks—Speech-to-Text Transcriptions, Voice Note Speech Synthesizers, Native C# Monitor Capture, and DOM Regex Filtering—are offloaded 100% to local PC GPU/CPU resources.
+- **Zero API Token Waste**: Conserves AI API model tokens strictly for reasoning, coding, and problem-solving, maximizing model availability for as long as possible.
+
+---
+
 ## 🔊 [v1.0.4] - 2026-07-29 (Natural Voice Note AI Response Engine)
 - **Natural Indonesian & English TTS Voice Synthesizer (`voice_synthesizer.py`)**: Added automatic text-to-speech audio synthesis powered by `gTTS` / Google Speech Engine.
 - **Asynchronous Voice Note Streaming**: Automatically generates and sends natural `.ogg` Voice Note audio responses alongside text replies to Telegram HP.
