@@ -72,11 +72,13 @@ def query_local_gpu_ollama(prompt_text, model_name="qwen2:1.5b"):
             data=payload,
             headers={"Content-Type": "application/json"}
         )
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=45) as resp:
             data = json.loads(resp.read().decode())
             reply = data.get("response", "").strip()
             if reply:
                 return f"{reply}\n\n⚡ _(Dijawab oleh GPU PC Lokal - 0 Token API)_"
+
+
     except Exception as e:
         print("[LOCAL GPU ROUTER ERR]", e)
     return None
