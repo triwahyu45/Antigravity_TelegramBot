@@ -412,7 +412,21 @@ def _do_send_tg_sync(text, role):
                 sent = True
             except Exception as ex:
                 print("[TG PLAIN ERR]", str(ex)[:80])
+
+        # Automatic Voice Note Response for AI replies
+        if role == 'ai' and sent:
+            try:
+                import voice_synthesizer
+                v_path = voice_synthesizer.generate_voice_note(full)
+                if v_path and os.path.exists(v_path):
+                    with open(v_path, "rb") as vf:
+                        bot.send_voice(ALLOWED_ID, vf, reply_to_message_id=reply_id)
+                        print("[MIRROR VOICE] Sent AI Voice Note response to Telegram HP!")
+            except Exception as ve:
+                print("[MIRROR VOICE ERR]", ve)
+
         time.sleep(0.1)
+
 
 def _tg_async_worker():
     print("[TG ASYNC WORKER] Started for non-blocking Telegram IO...")
