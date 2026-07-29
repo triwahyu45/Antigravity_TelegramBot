@@ -660,7 +660,17 @@ def h_switch_model(msg):
 @bot.message_handler(commands=["open_antigravity", "buka_antigravity"])
 
 
+def h_minimize_all(msg):
+    try:
+        subprocess.run(["powershell", "-NoProfile", "-Command", "(New-Object -ComObject Shell.Application).MinimizeAll()"], capture_output=True)
+        send(msg.chat.id, "📉 *Seluruh Jendela Desktop (Termasuk Steam) Berhasil Di-Minimize!*")
+        time.sleep(0.5)
+        h_ss(msg)
+    except Exception as e:
+        send(msg.chat.id, f"❌ Error: {e}")
+
 def h_hide_antigravity(msg):
+
     try:
         user32 = ctypes.windll.user32
         target_hwnd = None
@@ -854,8 +864,11 @@ def h_text(msg):
         h_open_antigravity(msg)
     elif tl in ("/hide", "/sembunyikan", "sembunyikan antigravity", "hide antigravity", "🙈 sembunyikan antigravity", "🙈 hide antigravity"):
         h_hide_antigravity(msg)
+    elif tl in ("/minimize_all", "/minimize_steam", "minimize steam", "minimize all", "minimize steamnya", "minimize steam dong", "📉 minimize steam"):
+        h_minimize_all(msg)
     elif tl in ("/models", "/model", "pilih model ai", "ganti model", "🤖 pilih model ai"):
         h_model_menu(msg)
+
 
     else:
         # Chat bebas -> Dukung Fitur Reply Pesan Telegram secara Natural
