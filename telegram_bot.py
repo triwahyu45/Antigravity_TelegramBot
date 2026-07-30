@@ -940,6 +940,23 @@ def h_open_chrome(msg, target_url="https://www.google.com"):
 
 
 
+def h_youtube_search(msg, query):
+    import urllib.parse
+    encoded = urllib.parse.quote_plus(query)
+    search_url = f"https://www.youtube.com/results?search_query={encoded}"
+    send(msg.chat.id, f"🎶 *Mencari di YouTube:* `{query}`...")
+    def bg_yt():
+        try:
+            chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+            if os.path.exists(chrome_path):
+                subprocess.Popen([chrome_path, "--new-window", search_url])
+            else:
+                subprocess.Popen(["powershell", "-Command", f"Start-Process '{search_url}'"])
+            send(msg.chat.id, f"✅ *Hasil Pencarian YouTube '{query}' Berhasil Dibuka!*")
+        except Exception as e:
+            send(msg.chat.id, f"❌ *Gagal mencari di YouTube:* {e}")
+    threading.Thread(target=bg_yt, daemon=True).start()
+
 # ── Handler Teks Pesan dari Telegram ──────────────────────────
 @bot.message_handler(func=lambda m: True)
 def h_text(msg):
@@ -980,12 +997,19 @@ def h_text(msg):
     elif tl in ("/ss", "/screenshot", "ss", "screenshot", "foto layar", "📸 screenshot"):
         h_ss(msg)
 
+    elif ("cari" in tl or "putar" in tl or "play" in tl) and ("yt" in tl or "youtube" in tl or "lagu" in tl or "musik" in tl):
+        q = t
+        for p_word in ["cari di yt", "cari di youtube", "sekarang cari di yt", "buka lagu", "putar lagu", "play"]:
+            if p_word in q.lower():
+                q = re.sub(p_word, '', q, flags=re.IGNORECASE).strip()
+        h_youtube_search(msg, q or t)
     elif "youtube" in tl and ("buka" in tl or "open" in tl or "/youtube" in tl or "buka youtube" in tl):
         h_open_chrome(msg, "https://www.youtube.com")
     elif tl in ("/chrome", "/buka_chrome", "buka chrome", "open chrome", "chrome", "🌐 buka chrome"):
         h_open_chrome(msg, "https://www.google.com")
     elif tl in ("/buka_antigravity", "/open_antigravity", "/show", "buka antigravity", "open antigravity", "🖥️ buka antigravity"):
         h_open_antigravity(msg)
+
 
 
     elif tl in ("/hide", "/sembunyikan", "sembunyikan antigravity", "hide antigravity", "🙈 sembunyikan antigravity", "🙈 hide antigravity"):
