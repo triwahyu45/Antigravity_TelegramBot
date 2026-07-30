@@ -219,10 +219,11 @@ JS_SCRAPE = r"""
         for (var container of aiContainers) {
             if (container.closest('[contenteditable="true"]')) continue;
             if (inputArea && inputArea.contains(container)) continue;
-            var md = domToMD(container).replace(/\n{2,}/g, "\n").trim();
+            var md = domToMD(container).trim();
             if (md.length > 5) {
                 msgs.push({role: 'ai', text: md});
             }
+
         }
 
 
