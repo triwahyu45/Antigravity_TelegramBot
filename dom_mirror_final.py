@@ -53,12 +53,13 @@ def md_to_telegram_html(md_text):
     text = html.escape(text, quote=False)
 
     text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
-    text = re.sub(r'(?<!\w)\*([^*]+)\*(?!\w)', r'<b>\1</b>', text)
+    text = re.sub(r'\*([^*]+)\*', r'<b>\1</b>', text)
     text = re.sub(r'(?<!\w)_([^_]+)_(?!\w)', r'<i>\1</i>', text)
     text = re.sub(r'~([^~]+)~', r'<s>\1</s>', text)
     
-    text = re.sub(r'\s*\*\*$', '', text, flags=re.MULTILINE)
-    text = re.sub(r'\s*\*$', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^\s*\*+\s*', '', text, flags=re.MULTILINE)
+    text = re.sub(r'\s*\*+$', '', text, flags=re.MULTILINE)
+
 
     for i, tag in enumerate(protected_html):
         text = text.replace(f"XTAGX{i}X", tag)
