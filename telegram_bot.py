@@ -929,7 +929,7 @@ def h_open_chrome(msg, target_url="https://www.google.com"):
         try:
             chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
             if os.path.exists(chrome_path):
-                subprocess.Popen([chrome_path, target_url])
+                subprocess.Popen([chrome_path, "--new-window", target_url])
                 send(msg.chat.id, f"✅ *{site_name} Berhasil Dibuka di Chrome PC!*")
             else:
                 subprocess.Popen(["powershell", "-Command", f"Start-Process {target_url}"])
@@ -937,6 +937,7 @@ def h_open_chrome(msg, target_url="https://www.google.com"):
         except Exception as e:
             send(msg.chat.id, f"❌ *Gagal membuka {site_name}:* {e}")
     threading.Thread(target=bg_chrome, daemon=True).start()
+
 
 
 # ── Handler Teks Pesan dari Telegram ──────────────────────────
