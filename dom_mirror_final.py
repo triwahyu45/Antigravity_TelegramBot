@@ -480,9 +480,11 @@ threading.Thread(target=_tg_async_worker, daemon=True, name="TgAsyncWorker").sta
 
 def send_tg(text, role):
     if not text or len(text.strip()) < 3: return
-    if role in ('progress', 'user') and is_duplicate_telegram_msg(text):
+    if is_duplicate_telegram_msg(text):
+        print(f"[MIRROR DUP BLOCKED] Blocked duplicate message ({role}): {text[:50]}")
         return
     tg_send_queue.put((text, role))
+
 
 def run():
     seen = load_seen()
