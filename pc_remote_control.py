@@ -59,23 +59,31 @@ def press_tab():
 
 def browser_back():
     user32 = ctypes.windll.user32
-    # Click top-left Chrome Back Arrow Button (X=20, Y=50)
+    # 1. Click top-left Chrome Back Arrow Button (X=25, Y=50)
     try:
-        user32.SetCursorPos(20, 50)
+        user32.SetCursorPos(25, 50)
         time.sleep(0.05)
         user32.mouse_event(0x0002, 0, 0, 0, 0)
         time.sleep(0.05)
         user32.mouse_event(0x0004, 0, 0, 0, 0)
     except: pass
     time.sleep(0.2)
-    # Send Alt + Left Arrow
+    # 2. Focus address bar first (Ctrl+L) to prevent YouTube player from receiving Left Arrow key
+    send_key_vk(0x11) # Ctrl
+    win32api.keybd_event(0x4C, 0, 0, 0) # L
+    time.sleep(0.05)
+    win32api.keybd_event(0x4C, 0, win32con.KEYEVENTF_KEYUP, 0)
+    win32api.keybd_event(0x11, 0, win32con.KEYEVENTF_KEYUP, 0)
+    time.sleep(0.1)
+    # 3. Send Alt + Left Arrow while address bar is focused
     win32api.keybd_event(win32con.VK_MENU, 0, 0, 0) # Alt
     time.sleep(0.05)
     win32api.keybd_event(win32con.VK_LEFT, 0, 0, 0) # Left Arrow
     time.sleep(0.05)
     win32api.keybd_event(win32con.VK_LEFT, 0, win32con.KEYEVENTF_KEYUP, 0)
     win32api.keybd_event(win32con.VK_MENU, 0, win32con.KEYEVENTF_KEYUP, 0)
-    print("[REMOTE CONTROL] Clicked Chrome Back Button (20, 50) & Sent Alt+Left")
+    print("[REMOTE CONTROL] Clicked Chrome Back Button & Safe Alt+Left")
+
 
 
 def browser_forward():
