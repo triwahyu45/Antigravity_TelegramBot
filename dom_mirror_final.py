@@ -215,16 +215,21 @@ JS_SCRAPE = r"""
             return children;
         }
 
-        var aiContainers = document.querySelectorAll('div.leading-relaxed, [class*="prose"], div.markdown-body, div[class*="ai-message"], div[class*="assistant"]');
+        var aiContainers = document.querySelectorAll('div.leading-relaxed, [class*="prose"], div.markdown-body');
+        var validContainers = [];
         for (var container of aiContainers) {
             if (container.closest('[contenteditable="true"]')) continue;
             if (inputArea && inputArea.contains(container)) continue;
-            var md = domToMD(container).trim();
+            validContainers.push(container);
+        }
+        if (validContainers.length > 0) {
+            var lastContainer = validContainers[validContainers.length - 1];
+            var md = domToMD(lastContainer).trim();
             if (md.length > 5) {
                 msgs.push({role: 'ai', text: md});
             }
-
         }
+
 
 
         // 4. IMAGE EXTRACTION
