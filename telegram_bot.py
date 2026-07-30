@@ -922,19 +922,20 @@ def h_media(msg):
         send(msg.chat.id, f"❌ *Gagal memproses media dari Telegram:* {e}")
 
 
-def h_open_chrome(msg):
-    send(msg.chat.id, "🌐 *Membuka Google Chrome di Layar PC...*")
+def h_open_chrome(msg, target_url="https://www.google.com"):
+    site_name = "YouTube" if "youtube.com" in target_url else "Google Chrome"
+    send(msg.chat.id, f"🌐 *Membuka {site_name} di Chrome PC...*")
     def bg_chrome():
         try:
             chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
             if os.path.exists(chrome_path):
-                subprocess.Popen([chrome_path, "--new-window", "https://www.google.com"])
-                send(msg.chat.id, "✅ *Google Chrome Berhasil Dibuka di PC!*")
+                subprocess.Popen([chrome_path, target_url])
+                send(msg.chat.id, f"✅ *{site_name} Berhasil Dibuka di Chrome PC!*")
             else:
-                subprocess.Popen(["powershell", "-Command", "Start-Process https://www.google.com"])
-                send(msg.chat.id, "✅ *Browser Default Berhasil Dibuka di PC!*")
+                subprocess.Popen(["powershell", "-Command", f"Start-Process {target_url}"])
+                send(msg.chat.id, f"✅ *{site_name} Berhasil Dibuka di Browser Default!*")
         except Exception as e:
-            send(msg.chat.id, f"❌ *Gagal membuka Chrome:* {e}")
+            send(msg.chat.id, f"❌ *Gagal membuka {site_name}:* {e}")
     threading.Thread(target=bg_chrome, daemon=True).start()
 
 # ── Handler Teks Pesan dari Telegram ──────────────────────────
@@ -977,10 +978,13 @@ def h_text(msg):
     elif tl in ("/ss", "/screenshot", "ss", "screenshot", "foto layar", "📸 screenshot"):
         h_ss(msg)
 
+    elif "youtube" in tl and ("buka" in tl or "open" in tl or "/youtube" in tl or "buka youtube" in tl):
+        h_open_chrome(msg, "https://www.youtube.com")
     elif tl in ("/chrome", "/buka_chrome", "buka chrome", "open chrome", "chrome", "🌐 buka chrome"):
-        h_open_chrome(msg)
+        h_open_chrome(msg, "https://www.google.com")
     elif tl in ("/buka_antigravity", "/open_antigravity", "/show", "buka antigravity", "open antigravity", "🖥️ buka antigravity"):
         h_open_antigravity(msg)
+
 
     elif tl in ("/hide", "/sembunyikan", "sembunyikan antigravity", "hide antigravity", "🙈 sembunyikan antigravity", "🙈 hide antigravity"):
         h_hide_antigravity(msg)
