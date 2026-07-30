@@ -942,6 +942,19 @@ def h_open_chrome(msg, target_url="https://www.google.com"):
             send(msg.chat.id, f"❌ *Gagal membuka {site_name}:* {e}")
     threading.Thread(target=bg_chrome, daemon=True).start()
 
+def h_close_chrome(msg):
+    send(msg.chat.id, "🚪 *Menutup Google Chrome di PC...*")
+    def bg_close():
+        try:
+            subprocess.run(["taskkill", "/F", "/IM", "chrome.exe", "/T"], capture_output=True, creationflags=0x08000000)
+            send(msg.chat.id, "✅ *Google Chrome Berhasil Ditutup Total!*")
+            time.sleep(1.0)
+            h_ss(msg)
+        except Exception as e:
+            send(msg.chat.id, f"❌ *Gagal menutup Chrome:* {e}")
+    threading.Thread(target=bg_close, daemon=True).start()
+
+
 
 
 def h_youtube_search(msg, query):
@@ -1070,8 +1083,11 @@ def h_text(msg):
 
     elif "youtube" in tl and ("buka" in tl or "open" in tl or "/youtube" in tl or "buka youtube" in tl):
         h_open_chrome(msg, "https://www.youtube.com")
-    elif tl in ("/chrome", "/buka_chrome", "buka chrome", "open chrome", "chrome", "🌐 buka chrome"):
+    elif tl in ("tutup chrome", "close chrome", "/close_chrome", "tutup browser", "close browser", "🚪 tutup chrome"):
+        h_close_chrome(msg)
+    elif tl in ("chrome", "/buka_chrome", "buka chrome", "open chrome", "chrome", "🌐 buka chrome"):
         h_open_chrome(msg, "https://www.google.com")
+
     elif tl in ("/buka_antigravity", "/open_antigravity", "/show", "buka antigravity", "open antigravity", "🖥️ buka antigravity"):
         h_open_antigravity(msg)
 
