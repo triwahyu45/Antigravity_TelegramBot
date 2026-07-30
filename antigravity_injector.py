@@ -152,19 +152,10 @@ def cdp_inject_and_submit(text):
         sel.addRange(range);
         document.execCommand('delete', false, null);
         
-        // Insert text line-by-line with Shift+Enter for newlines (Lexical-compatible)
+        // Insert multiline text preserving exact newlines for Lexical contenteditable
         var fullText = {escaped_text};
-        var lines = fullText.split('\\n');
-        for (var i = 0; i < lines.length; i++) {{
-            if (i > 0) {{
-                input.dispatchEvent(new KeyboardEvent('keydown',  {{key:'Enter',code:'Enter',keyCode:13,which:13,shiftKey:true,bubbles:true}}));
-                input.dispatchEvent(new KeyboardEvent('keypress', {{key:'Enter',code:'Enter',keyCode:13,which:13,shiftKey:true,bubbles:true}}));
-                input.dispatchEvent(new KeyboardEvent('keyup',    {{key:'Enter',code:'Enter',keyCode:13,which:13,shiftKey:true,bubbles:true}}));
-            }}
-            if (lines[i].length > 0) {{
-                document.execCommand('insertText', false, lines[i]);
-            }}
-        }}
+        document.execCommand('insertText', false, fullText);
+
         
         input.dispatchEvent(new Event('input', {{ bubbles: true }}));
         
