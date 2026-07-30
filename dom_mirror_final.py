@@ -245,12 +245,47 @@ JS_SCRAPE = r"""
 })()
 """
 
+def clean_latex_math(text):
+    if not text: return ""
+    math_map = {
+        r'\\varepsilon': 'ε',
+        r'\\epsilon': 'ε',
+        r'\\approx': '≈',
+        r'\\leq': '≤',
+        r'\\geq': '≥',
+        r'\\neq': '≠',
+        r'\\times': '×',
+        r'\\div': '÷',
+        r'\\pm': '±',
+        r'\\infty': '∞',
+        r'\\mu': 'μ',
+        r'\\pi': 'π',
+        r'\\delta': 'δ',
+        r'\\Delta': 'Δ',
+        r'\\theta': 'θ',
+        r'\\lambda': 'λ',
+        r'\\sigma': 'σ',
+        r'\\omega': 'ω',
+        r'\\Omega': 'Ω'
+    }
+    t = text
+    for pattern, rep in math_map.items():
+        t = re.sub(pattern, rep, t)
+        
+    t = re.sub(r'\\\(|\\\)|\\\[|\\\]', '', t)
+    t = re.sub(r'_\{?([a-zA-Z0-9]+)\}?', r'_\1', t)
+    t = re.sub(r'\^\{?([a-zA-Z0-9]+)\}?', r'^\1', t)
+    t = re.sub(r'\\text\{([^}]+)\}', r'\1', t)
+    return t
+
 def clean_ai_text(text):
     if not text: return ""
     lines = text.splitlines()
     # Preserve Ran, Edited, Searched, Created progress lines (only filter out internal 'Worked for' timer)
     filtered = [l for l in lines if not l.strip().startswith('Worked for')]
-    return "\n".join(filtered).strip()
+    raw_cleaned = "\n".join(filtered).strip()
+    return clean_latex_math(raw_cleaned)
+
 
 def msg_key(role, text):
     return hashlib.md5(f"{role}:{text.strip()}".encode('utf-8', errors='ignore')).hexdigest()
