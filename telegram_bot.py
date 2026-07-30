@@ -100,7 +100,9 @@ def md_to_telegram_html(md_text):
     for i, cb in enumerate(code_blocks):
         text = text.replace(f"XCODEBLOCKX{i}X", cb)
 
+    text = re.sub(r'\n{3,}', '\n\n', text)
     return text.strip()
+
 
 
 from secrets_loader import BOT_TOKEN, ALLOWED_ID
