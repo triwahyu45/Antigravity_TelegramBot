@@ -813,6 +813,33 @@ def h_open_antigravity(msg):
     threading.Thread(target=bg_open, daemon=True).start()
 
 # ── Handler Media (Foto, Video, Voice Note, Audio, Dokumen) ───
+media_group_buffer = {}
+media_group_lock = threading.Lock()
+
+def flush_media_group(mg_id, chat_id):
+    with media_group_lock:
+        if mg_id not in media_group_buffer: return
+        info = media_group_buffer.pop(mg_id)
+    
+    paths = info['photos']
+    caption = info['caption']
+    count = len(paths)
+    
+    if count == 1:
+        prompt = f"User mengirim gambar / foto ke PC (Disimpan di: {paths[0]})."
+        msg_text = "📥 *Gambar / foto diterima!* Disimpan di PC & dimasukkan ke antrean AI."
+    else:
+        paths_str = ", ".join(paths)
+        prompt = f"User mengirim album {count} foto/gambar sekaligus ke PC (Disimpan di: {paths_str})."
+        msg_text = f"📸 *Album {count} foto diterima sekaligus!* Disimpan di PC & dimasukkan ke antrean AI."
+
+    if caption:
+        prompt += f" Pesan/Caption dari user: \"{caption}\""
+
+    record_injected_prompt(prompt, raw_text=caption or prompt)
+    msg_queue.put((prompt, chat_id, caption or prompt))
+    send(chat_id, msg_text, use_kb=False)
+
 @bot.message_handler(content_types=['photo', 'video', 'voice', 'audio', 'video_note', 'document'])
 def h_media(msg):
     if not auth(msg): return
@@ -855,25 +882,44 @@ def h_media(msg):
 
         downloaded_file = bot.download_file(file_info.file_path)
         ext = os.path.splitext(file_info.file_path)[1] or ".bin"
-        save_path = os.path.join(RECV_DIR, f"{prefix}_{int(time.time())}{ext}")
+        save_path = os.path.join(RECV_DIR, f"{prefix}_{int(time.time())}_{os.urandom(2).hex()}{ext}")
         with open(save_path, "wb") as f:
             f.write(downloaded_file)
             
         log_activity(f"📁 [MEDIA RECEIVED] {media_type} saved to {save_path}")
         
+        # Handle Telegram Multi-Photo Album Media Groups
+        mg_id = getattr(msg, 'media_group_id', None)
+        if mg_id and msg.photo:
+            with media_group_lock:
+                if mg_id not in media_group_buffer:
+                    media_group_buffer[mg_id] = {
+                        'photos': [save_path],
+                        'caption': caption,
+                        'timer': None
+                    }
+                    t = threading.Timer(1.2, flush_media_group, args=(mg_id, msg.chat.id))
+                    media_group_buffer[mg_id]['timer'] = t
+                    t.start()
+                else:
+                    media_group_buffer[mg_id]['photos'].append(save_path)
+                    if caption and not media_group_buffer[mg_id]['caption']:
+                        media_group_buffer[mg_id]['caption'] = caption
+            return
+
+        # Single media upload
         media_prompt = f"User mengirim {media_type} ke PC (Disimpan di: {save_path})."
         if caption:
             media_prompt += f" Pesan/Caption dari user: \"{caption}\""
             
         record_injected_prompt(media_prompt, raw_text=caption or media_prompt)
         msg_queue.put((media_prompt, msg.chat.id, caption or media_prompt))
-        
-        q_size = msg_queue.qsize()
         send(msg.chat.id, f"📥 *{media_type.capitalize()} diterima!* Disimpan di PC & dimasukkan ke antrean AI.", use_kb=False)
 
     except Exception as e:
         log_activity(f"[MEDIA ERR] {e}")
         send(msg.chat.id, f"❌ *Gagal memproses media dari Telegram:* {e}")
+
 
 # ── Handler Teks Pesan dari Telegram ──────────────────────────
 @bot.message_handler(func=lambda m: True)
