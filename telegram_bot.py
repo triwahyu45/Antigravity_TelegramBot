@@ -922,6 +922,21 @@ def h_media(msg):
         send(msg.chat.id, f"❌ *Gagal memproses media dari Telegram:* {e}")
 
 
+def h_open_chrome(msg):
+    send(msg.chat.id, "🌐 *Membuka Google Chrome di Layar PC...*")
+    def bg_chrome():
+        try:
+            chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+            if os.path.exists(chrome_path):
+                subprocess.Popen([chrome_path, "--new-window", "https://www.google.com"])
+                send(msg.chat.id, "✅ *Google Chrome Berhasil Dibuka di PC!*")
+            else:
+                subprocess.Popen(["powershell", "-Command", "Start-Process https://www.google.com"])
+                send(msg.chat.id, "✅ *Browser Default Berhasil Dibuka di PC!*")
+        except Exception as e:
+            send(msg.chat.id, f"❌ *Gagal membuka Chrome:* {e}")
+    threading.Thread(target=bg_chrome, daemon=True).start()
+
 # ── Handler Teks Pesan dari Telegram ──────────────────────────
 @bot.message_handler(func=lambda m: True)
 def h_text(msg):
@@ -962,8 +977,11 @@ def h_text(msg):
     elif tl in ("/ss", "/screenshot", "ss", "screenshot", "foto layar", "📸 screenshot"):
         h_ss(msg)
 
+    elif tl in ("/chrome", "/buka_chrome", "buka chrome", "open chrome", "chrome", "🌐 buka chrome"):
+        h_open_chrome(msg)
     elif tl in ("/buka_antigravity", "/open_antigravity", "/show", "buka antigravity", "open antigravity", "🖥️ buka antigravity"):
         h_open_antigravity(msg)
+
     elif tl in ("/hide", "/sembunyikan", "sembunyikan antigravity", "hide antigravity", "🙈 sembunyikan antigravity", "🙈 hide antigravity"):
         h_hide_antigravity(msg)
     elif tl in ("/minimize_all", "/minimize_steam", "minimize steam", "minimize all", "minimize steamnya", "minimize steam dong", "📉 minimize steam"):
