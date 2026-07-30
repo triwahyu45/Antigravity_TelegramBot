@@ -58,13 +58,25 @@ def press_tab():
     send_key_vk(0x09)
 
 def browser_back():
+    user32 = ctypes.windll.user32
+    # Click top-left Chrome Back Arrow Button (X=20, Y=50)
+    try:
+        user32.SetCursorPos(20, 50)
+        time.sleep(0.05)
+        user32.mouse_event(0x0002, 0, 0, 0, 0)
+        time.sleep(0.05)
+        user32.mouse_event(0x0004, 0, 0, 0, 0)
+    except: pass
+    time.sleep(0.2)
+    # Send Alt + Left Arrow
     win32api.keybd_event(win32con.VK_MENU, 0, 0, 0) # Alt
     time.sleep(0.05)
     win32api.keybd_event(win32con.VK_LEFT, 0, 0, 0) # Left Arrow
     time.sleep(0.05)
     win32api.keybd_event(win32con.VK_LEFT, 0, win32con.KEYEVENTF_KEYUP, 0)
     win32api.keybd_event(win32con.VK_MENU, 0, win32con.KEYEVENTF_KEYUP, 0)
-    print("[REMOTE CONTROL] Sent Browser Back (Alt + Left)")
+    print("[REMOTE CONTROL] Clicked Chrome Back Button (20, 50) & Sent Alt+Left")
+
 
 def browser_forward():
     win32api.keybd_event(win32con.VK_MENU, 0, 0, 0) # Alt
