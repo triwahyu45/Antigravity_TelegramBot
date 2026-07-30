@@ -938,6 +938,7 @@ def h_open_chrome(msg, target_url="https://www.google.com"):
             send(msg.chat.id, f"❌ *Gagal membuka {site_name}:* {e}")
     threading.Thread(target=bg_chrome, daemon=True).start()
 
+
 # ── Handler Teks Pesan dari Telegram ──────────────────────────
 @bot.message_handler(func=lambda m: True)
 def h_text(msg):
