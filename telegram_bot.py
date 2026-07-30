@@ -997,12 +997,45 @@ def h_text(msg):
     elif tl in ("/ss", "/screenshot", "ss", "screenshot", "foto layar", "📸 screenshot"):
         h_ss(msg)
 
+    elif tl in ("klik video", "buka video", "play video", "klik hasil", "pilih video", "▶️ play video"):
+        try:
+            import pc_remote_control as rc
+            rc.click_first_yt_result()
+            send(msg.chat.id, "🖱️ *Mouse mengklik hasil video pertama di layar PC!*")
+        except Exception as e:
+            send(msg.chat.id, f"❌ *Gagal mengklik video:* {e}")
+
+    elif tl in ("pause", "play", "pause video", "klik tengah", "play/pause"):
+        try:
+            import pc_remote_control as rc
+            rc.click_center_play()
+            send(msg.chat.id, "⏯️ *Mouse mengklik layar tengah (Play/Pause Video)!*")
+        except Exception as e:
+            send(msg.chat.id, f"❌ *Gagal play/pause:* {e}")
+
+    elif tl in ("scroll bawah", "scroll down", "layar bawah"):
+        try:
+            import pc_remote_control as rc
+            rc.mouse_scroll(-400)
+            send(msg.chat.id, "📜 *Mouse scroll ke bawah di layar PC!*")
+        except Exception as e:
+            send(msg.chat.id, f"❌ *Gagal scroll:* {e}")
+
+    elif tl in ("scroll atas", "scroll up", "layar atas"):
+        try:
+            import pc_remote_control as rc
+            rc.mouse_scroll(400)
+            send(msg.chat.id, "📜 *Mouse scroll ke atas di layar PC!*")
+        except Exception as e:
+            send(msg.chat.id, f"❌ *Gagal scroll:* {e}")
+
     elif ("cari" in tl or "putar" in tl or "play" in tl) and ("yt" in tl or "youtube" in tl or "lagu" in tl or "musik" in tl):
         q = t
         for p_word in ["cari di yt", "cari di youtube", "sekarang cari di yt", "buka lagu", "putar lagu", "play"]:
             if p_word in q.lower():
                 q = re.sub(p_word, '', q, flags=re.IGNORECASE).strip()
         h_youtube_search(msg, q or t)
+
     elif "youtube" in tl and ("buka" in tl or "open" in tl or "/youtube" in tl or "buka youtube" in tl):
         h_open_chrome(msg, "https://www.youtube.com")
     elif tl in ("/chrome", "/buka_chrome", "buka chrome", "open chrome", "chrome", "🌐 buka chrome"):
