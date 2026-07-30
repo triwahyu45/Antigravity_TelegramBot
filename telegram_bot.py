@@ -999,6 +999,14 @@ def h_text(msg):
     elif tl in ("/ss", "/screenshot", "ss", "screenshot", "foto layar", "📸 screenshot"):
         h_ss(msg)
 
+    elif tl in ("klik", "/klik", "click", "mouse klik", "🖱️ klik"):
+        try:
+            import pc_remote_control as rc
+            rc.mouse_click()
+            send(msg.chat.id, "🖱️ *Mouse fisik PC berhasil diklik!*")
+        except Exception as e:
+            send(msg.chat.id, f"❌ *Gagal mengklik mouse:* {e}")
+
     elif tl in ("back", "kembali", "/back", "buka back", "⬅️ back"):
         try:
             import pc_remote_control as rc
@@ -1006,6 +1014,7 @@ def h_text(msg):
             send(msg.chat.id, "⬅️ *Browser Kembali ke Halaman Sebelumnya (Back)!*")
         except Exception as e:
             send(msg.chat.id, f"❌ *Gagal back:* {e}")
+
 
     elif tl in ("klik video", "buka video", "play video", "klik hasil", "pilih video", "▶️ play video"):
         try:
