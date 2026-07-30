@@ -82,12 +82,16 @@ def click_center_play():
 
 def click_first_yt_result():
     w, h = get_screen_size()
-    # First YouTube search video title thumbnail is located around X=36%, Y=30%
-    rx, ry = int(w * 0.36), int(h * 0.30)
+    # Click YouTube thumbnail image on left (X=24%, Y=28%)
+    rx, ry = int(w * 0.24), int(h * 0.28)
     mouse_click(rx, ry)
+    time.sleep(0.2)
+    # Click YouTube video title text on right (X=36%, Y=28%)
+    mouse_click(int(w * 0.36), int(h * 0.28))
     time.sleep(0.3)
     press_enter()
-    print(f"[REMOTE CONTROL] Clicked & Played First YouTube Result ({rx}, {ry})")
+    print(f"[REMOTE CONTROL] Clicked & Played YouTube Thumbnail ({rx}, {ry})")
+
 
 
 if __name__ == "__main__":
