@@ -57,22 +57,24 @@ def press_escape():
 def press_tab():
     send_key_vk(0x09)
 
-def type_text(text):
-    for char in text:
-        if char == '\n':
-            press_enter()
-            time.sleep(0.05)
-            continue
-        vk = win32api.VkKeyScan(char)
-        shift = (vk >> 8) & 1
-        code = vk & 0xFF
-        if shift:
-            win32api.keybd_event(0x10, 0, 0, 0) # Shift
-        win32api.keybd_event(code, 0, 0, 0)
-        time.sleep(0.02)
-        win32api.keybd_event(code, 0, win32con.KEYEVENTF_KEYUP, 0)
-        if shift:
-            win32api.keybd_event(0x10, 0, win32con.KEYEVENTF_KEYUP, 0)
+def browser_back():
+    win32api.keybd_event(win32con.VK_MENU, 0, 0, 0) # Alt
+    time.sleep(0.05)
+    win32api.keybd_event(win32con.VK_LEFT, 0, 0, 0) # Left Arrow
+    time.sleep(0.05)
+    win32api.keybd_event(win32con.VK_LEFT, 0, win32con.KEYEVENTF_KEYUP, 0)
+    win32api.keybd_event(win32con.VK_MENU, 0, win32con.KEYEVENTF_KEYUP, 0)
+    print("[REMOTE CONTROL] Sent Browser Back (Alt + Left)")
+
+def browser_forward():
+    win32api.keybd_event(win32con.VK_MENU, 0, 0, 0) # Alt
+    time.sleep(0.05)
+    win32api.keybd_event(win32con.VK_RIGHT, 0, 0, 0) # Right Arrow
+    time.sleep(0.05)
+    win32api.keybd_event(win32con.VK_RIGHT, 0, win32con.KEYEVENTF_KEYUP, 0)
+    win32api.keybd_event(win32con.VK_MENU, 0, win32con.KEYEVENTF_KEYUP, 0)
+    print("[REMOTE CONTROL] Sent Browser Forward (Alt + Right)")
+
 
 def click_center_play():
     w, h = get_screen_size()
