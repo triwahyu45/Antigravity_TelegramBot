@@ -1007,7 +1007,11 @@ def h_text(msg):
         except Exception as e:
             send(msg.chat.id, f"❌ *Gagal mengklik mouse:* {e}")
 
+    elif tl in ("home", "home yt", "beranda", "beranda youtube", "/home", "🏠 home"):
+        h_open_chrome(msg, "https://www.youtube.com")
+
     elif tl in ("back", "kembali", "/back", "buka back", "⬅️ back"):
+
         try:
             import pc_remote_control as rc
             rc.browser_back()
