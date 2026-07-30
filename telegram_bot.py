@@ -936,6 +936,8 @@ def h_open_chrome(msg, target_url="https://www.google.com"):
             else:
                 subprocess.Popen(["powershell", "-Command", f"Start-Process {target_url}"])
                 send(msg.chat.id, f"✅ *{site_name} Berhasil Dibuka di Browser Default!*")
+            time.sleep(1.5)
+            h_ss(msg)
         except Exception as e:
             send(msg.chat.id, f"❌ *Gagal membuka {site_name}:* {e}")
     threading.Thread(target=bg_chrome, daemon=True).start()
@@ -955,6 +957,8 @@ def h_youtube_search(msg, query):
             else:
                 subprocess.Popen(["powershell", "-Command", f"Start-Process '{search_url}'"])
             send(msg.chat.id, f"✅ *Hasil Pencarian YouTube '{query}' Berhasil Dibuka!*")
+            time.sleep(1.5)
+            h_ss(msg)
         except Exception as e:
             send(msg.chat.id, f"❌ *Gagal mencari di YouTube:* {e}")
     threading.Thread(target=bg_yt, daemon=True).start()
@@ -1004,6 +1008,8 @@ def h_text(msg):
             import pc_remote_control as rc
             rc.mouse_click()
             send(msg.chat.id, "🖱️ *Mouse fisik PC berhasil diklik!*")
+            time.sleep(1.0)
+            h_ss(msg)
         except Exception as e:
             send(msg.chat.id, f"❌ *Gagal mengklik mouse:* {e}")
 
@@ -1016,6 +1022,8 @@ def h_text(msg):
             import pc_remote_control as rc
             rc.browser_back()
             send(msg.chat.id, "⬅️ *Browser Kembali ke Halaman Sebelumnya (Back)!*")
+            time.sleep(1.0)
+            h_ss(msg)
         except Exception as e:
             send(msg.chat.id, f"❌ *Gagal back:* {e}")
 
