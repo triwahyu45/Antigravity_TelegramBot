@@ -778,10 +778,10 @@ def h_open_antigravity(msg):
 
         ANTIGRAVITY_PATH = r"C:\Users\Triwahyu45\AppData\Local\Programs\antigravity\Antigravity.exe"
 
-        # Only launch EXE if process is NOT running at all
-        if not target_hwnd and not running:
+        # Launch EXE if window is not found
+        if not target_hwnd:
             if os.path.exists(ANTIGRAVITY_PATH):
-                send(msg.chat.id, "🚀 *Aplikasi belum berjalan. Menjalankan Antigravity.exe...*")
+                send(msg.chat.id, "🚀 *Jendela belum terbuka. Menjalankan Antigravity.exe...*")
                 subprocess.Popen(f'"{ANTIGRAVITY_PATH}"', shell=True, creationflags=CREATE_NO_WINDOW)
                 for _ in range(30):
                     time.sleep(0.5)
@@ -790,6 +790,7 @@ def h_open_antigravity(msg):
             else:
                 send(msg.chat.id, f"❌ *Aplikasi tidak ditemukan di path:* `{ANTIGRAVITY_PATH}`")
                 return
+
 
         user32.EnumWindows(WNDENUMPROC(enum_cb), 0)
         if not target_hwnd:
