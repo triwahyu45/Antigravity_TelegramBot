@@ -1,0 +1,9 @@
+{
+  "bot_token": "YOUR_TELEGRAM_BOT_TOKEN_HERE",
+  "allowed_chat_id": 123456789,
+  "target_chat_title": "Wahyu's PC",
+  "chrome_path": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "antigravity_path": "C:\\Users\\YOUR_USERNAME\\AppData\\Local\\Programs\\antigravity\\Antigravity.exe",
+  "auto_screenshot_verify": true,
+  "duplicate_check_timeout_seconds": 300
+}

@@ -74,13 +74,19 @@ git clone https://github.com/triwahyu45/Antigravity_TelegramBot.git
 cd Antigravity_TelegramBot
 cp secrets.example.json secrets.json
 ```
-Edit `secrets.json` and paste your Bot Token and User ID:
+Edit `secrets.json` and customize your settings:
 ```json
 {
   "BOT_TOKEN": "YOUR_TELEGRAM_BOT_TOKEN_FROM_BOTFATHER",
-  "ALLOWED_ID": YOUR_NUMERIC_TELEGRAM_USER_ID
+  "ALLOWED_ID": YOUR_NUMERIC_TELEGRAM_USER_ID,
+  "TARGET_CHAT_TITLE": "Wahyu's PC",
+  "CHROME_PATH": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "ANTIGRAVITY_PATH": "C:\\Users\\YOUR_USERNAME\\AppData\\Local\\Programs\\antigravity\\Antigravity.exe",
+  "AUTO_SCREENSHOT": true,
+  "DUP_TIMEOUT": 300
 }
 ```
+
 
 ### 4️⃣ Step 4: Install Dependencies & Compile ScreenGrabber
 ```bash

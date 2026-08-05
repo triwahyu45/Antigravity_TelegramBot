@@ -105,7 +105,11 @@ def md_to_telegram_html(md_text):
 
 
 
-from secrets_loader import BOT_TOKEN, ALLOWED_ID
+from secrets_loader import (
+    BOT_TOKEN, ALLOWED_ID, TARGET_CHAT_TITLE,
+    CHROME_PATH, ANTIGRAVITY_PATH, AUTO_SCREENSHOT, DUP_TIMEOUT
+)
+
 # ALLOWED_ID imported from secrets_loader
 BASE            = r"G:\Antigravity_Server"
 RECEIVED        = os.path.join(BASE, "Received_Files")
@@ -762,7 +766,7 @@ def h_open_antigravity(msg):
                 buf = ctypes.create_unicode_buffer(length + 1)
                 user32.GetWindowTextW(hwnd, buf, length + 1)
                 title = buf.value
-                if "Antigravity" in title or "Wahyu" in title:
+                if "Antigravity" in title or (TARGET_CHAT_TITLE and TARGET_CHAT_TITLE.lower() in title.lower()):
                     target_hwnd.append((hwnd, title))
             return True
         WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_int, ctypes.c_int)
@@ -776,13 +780,12 @@ def h_open_antigravity(msg):
                     running = True; break
             except: pass
 
-        ANTIGRAVITY_PATH = r"C:\Users\Triwahyu45\AppData\Local\Programs\antigravity\Antigravity.exe"
-
         # Launch EXE if window is not found
         if not target_hwnd:
             if os.path.exists(ANTIGRAVITY_PATH):
                 send(msg.chat.id, "🚀 *Jendela belum terbuka. Menjalankan Antigravity.exe...*")
                 subprocess.Popen(f'"{ANTIGRAVITY_PATH}"', shell=True, creationflags=CREATE_NO_WINDOW)
+
                 for _ in range(30):
                     time.sleep(0.5)
                     user32.EnumWindows(WNDENUMPROC(enum_cb), 0)
@@ -930,9 +933,8 @@ def h_open_chrome(msg, target_url="https://www.google.com"):
     send(msg.chat.id, f"🌐 *Membuka {site_name} di Chrome PC...*")
     def bg_chrome():
         try:
-            chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-            if os.path.exists(chrome_path):
-                subprocess.Popen([chrome_path, "--new-window", target_url])
+            if os.path.exists(CHROME_PATH):
+                subprocess.Popen([CHROME_PATH, "--new-window", target_url])
                 send(msg.chat.id, f"✅ *{site_name} Berhasil Dibuka di Chrome PC!*")
             else:
                 subprocess.Popen(["powershell", "-Command", f"Start-Process {target_url}"])
@@ -965,11 +967,11 @@ def h_youtube_search(msg, query):
     send(msg.chat.id, f"🎶 *Mencari di YouTube:* `{query}`...")
     def bg_yt():
         try:
-            chrome_path = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-            if os.path.exists(chrome_path):
-                subprocess.Popen([chrome_path, "--new-window", search_url])
+            if os.path.exists(CHROME_PATH):
+                subprocess.Popen([CHROME_PATH, "--new-window", search_url])
             else:
                 subprocess.Popen(["powershell", "-Command", f"Start-Process '{search_url}'"])
+
             send(msg.chat.id, f"✅ *Hasil Pencarian YouTube '{query}' Berhasil Dibuka!*")
             time.sleep(1.5)
             h_ss(msg)
