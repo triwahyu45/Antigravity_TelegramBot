@@ -746,11 +746,31 @@ def h_minimize_all(msg):
 
 def h_hide_antigravity(msg):
     try:
-        import win_toggle
-        win_toggle.hide_antigravity_window()
-        send(msg.chat.id, "🙈 *Jendela Antigravity BERHASIL DISEMBUNYIKAN TOTAL (100% Silent Background & Hilang dari Taskbar)!*\nLayar PC & Taskbar 100% bersih. Chat Telegram HP ↔ AI di PC tetap terhubung & berbalas instan di background!")
+        user32 = ctypes.windll.user32
+        hidden = []
+
+        def enum_cb(hwnd, extra):
+            if user32.IsWindowVisible(hwnd):
+                length = user32.GetWindowTextLengthW(hwnd)
+                if length > 0:
+                    buf = ctypes.create_unicode_buffer(length + 1)
+                    user32.GetWindowTextW(hwnd, buf, length + 1)
+                    title = buf.value
+                    if "Antigravity" in title or (TARGET_CHAT_TITLE and TARGET_CHAT_TITLE.lower() in title.lower()):
+                        user32.ShowWindow(hwnd, 0)  # SW_HIDE
+                        hidden.append(title)
+            return True
+
+        WNDENUMPROC = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.c_int, ctypes.c_int)
+        user32.EnumWindows(WNDENUMPROC(enum_cb), 0)
+
+        if hidden:
+            send(msg.chat.id, "🙈 *Jendela Antigravity BERHASIL DISEMBUNYIKAN TOTAL (100% Silent Background & Hilang dari Taskbar)!*\nLayar PC & Taskbar 100% bersih. Chat Telegram HP ↔ AI di PC tetap terhubung & berbalas instan di background!")
+        else:
+            send(msg.chat.id, "⚠️ *Jendela Antigravity tidak ditemukan di layar (mungkin sudah tersembunyi atau belum dibuka).*")
     except Exception as e:
         send(msg.chat.id, f"❌ Gagal menyembunyikan jendela: {e}")
+
 
 
 def h_open_antigravity(msg):
